@@ -270,7 +270,7 @@
       ctx.scale(s, 2 - s);
 
       ctx.fillStyle = shadow;
-      ctx.fillRect(-bw / 2 + 4, -bh / 2 + 4, bw, bh);
+      ctx.fillRect(-bw / 2 + 3, -bh / 2 + 3, bw, bh);
 
       ctx.fillStyle = fill;
       ctx.strokeStyle = ink;
@@ -281,10 +281,12 @@
       ctx.fillStyle = '#141413';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.font = '700 10.5px "Space Mono", monospace';
-      ctx.fillText(label, 0, -6);
-      ctx.font = '400 9px "Space Mono", monospace';
-      ctx.fillText(sub, 0, 8);
+      const labelSize = Math.max(8.5, Math.min(10.5, bw * 0.16));
+      const subSize = Math.max(7.2, Math.min(9, bw * 0.13));
+      ctx.font = '700 ' + labelSize.toFixed(1) + 'px "Space Mono", monospace';
+      ctx.fillText(label, 0, -bh * 0.14);
+      ctx.font = '400 ' + subSize.toFixed(1) + 'px "Space Mono", monospace';
+      ctx.fillText(sub, 0, bh * 0.22);
       ctx.restore();
     }
 
@@ -415,16 +417,16 @@
       }
       ejected = nextEj;
 
-      // Draw stations on top of conveyor track
-      const bw = w < 380 ? 58 : 72;
-      const bh = 44;
+      // Draw stations on top of conveyor track (proportional to canvas width)
+      const bw = Math.min(72, Math.max(46, (w - 44) / 4.4));
+      const bh = Math.min(44, Math.max(34, bw * 0.62));
       stations.forEach((st) => {
-        drawStation(st.x, railY - 40, bw, bh, st.fill, st.label, st.sub, stamps[st.key], ink, shadow);
+        drawStation(st.x, railY - bh - 6, bw, bh, st.fill, st.label, st.sub, stamps[st.key], ink, shadow);
         ctx.strokeStyle = ink;
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.moveTo(st.x, railY - 18);
-        ctx.lineTo(st.x, railY - 8);
+        ctx.moveTo(st.x, railY - 6);
+        ctx.lineTo(st.x, railY + 2);
         ctx.stroke();
       });
 
@@ -435,12 +437,18 @@
       }
     }
 
-    canvas.addEventListener('click', () => {
+    function triggerBurst() {
       if (REDUCED_MOTION) return;
       for (let i = 0; i < 6; i++) {
         setTimeout(() => spawnBlock(i !== 2), i * 85);
       }
-    });
+    }
+
+    canvas.addEventListener('click', triggerBurst);
+    canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      triggerBurst();
+    }, { passive: false });
 
     redrawMachine = () => render(0);
     window.addEventListener('resize', () => {
@@ -529,7 +537,7 @@
       if (isMobile || REDUCED_MOTION) {
         stageProgress = idx * 0.25 + 0.05;
         setChapterUI(idx);
-        if (REDUCED_MOTION && redrawStage) redrawStage();
+        if (redrawStage) redrawStage();
         return;
       }
 
@@ -544,6 +552,41 @@
       }
     });
   });
+
+  // Native touch swipe navigation on the folder board for mobile & tablet
+  const folderBoardEl = document.querySelector('.folder-board');
+  if (folderBoardEl) {
+    let touchStartX = 0;
+    let touchStartY = 0;
+    folderBoardEl.addEventListener('touchstart', (e) => {
+      if (e.touches && e.touches.length === 1) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }
+    }, { passive: true });
+
+    folderBoardEl.addEventListener('touchend', (e) => {
+      if (window.innerWidth > 900 || !e.changedTouches || e.changedTouches.length !== 1) return;
+      const diffX = e.changedTouches[0].clientX - touchStartX;
+      const diffY = e.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(diffX) > 42 && Math.abs(diffX) > Math.abs(diffY)) {
+        const current = activeChapter >= 0 ? activeChapter : 0;
+        if (diffX < 0) {
+          // Swipe left -> advance to next chapter
+          const next = (current + 1) % 4;
+          stageProgress = next * 0.25 + 0.05;
+          setChapterUI(next);
+          if (redrawStage) redrawStage();
+        } else {
+          // Swipe right -> return to previous chapter
+          const prev = (current - 1 + 4) % 4;
+          stageProgress = prev * 0.25 + 0.05;
+          setChapterUI(prev);
+          if (redrawStage) redrawStage();
+        }
+      }
+    }, { passive: true });
+  }
 
   function initStageCanvas() {
     if (!stageCanvas || !stageCanvas.getContext) return;
@@ -628,9 +671,11 @@
     function sceneRecon(alpha, t, pal) {
       ctx.save();
       ctx.globalAlpha = alpha;
-      const cx = cw * 0.46;
+      const isCompact = cw < 480;
+      const cx = isCompact ? cw * 0.42 : cw * 0.46;
       const cy = ch * 0.5;
-      const r = Math.min(cw, ch) * 0.17;
+      const r = Math.min(cw, ch) * (isCompact ? 0.15 : 0.17);
+      const endLineX = isCompact ? cw * 0.72 : cw - 116;
 
       for (let i = 0; i < 5; i++) {
         const ly = ch * (0.18 + i * 0.16);
@@ -638,17 +683,17 @@
         ctx.strokeStyle = pal.ink;
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.moveTo(22, ly);
-        ctx.lineTo(dup ? cx - r - 12 : cw - 116, ly);
+        ctx.moveTo(16, ly);
+        ctx.lineTo(dup ? cx - r - 8 : endLineX, ly);
         ctx.stroke();
 
         const ph = (t * (0.36 + i * 0.04) + i * 0.21) % 1;
         if (dup) {
-          const px = 22 + ph * (cx - r - 28);
-          hardBox(px - 6, ly - 6, 12, 12, pal.coral, pal, 2, 2);
+          const px = 16 + ph * (cx - r - 20);
+          hardBox(px - 5, ly - 5, 10, 10, pal.coral, pal, 1.5, 1.5);
         } else {
-          const px = 22 + ph * (cw - 142);
-          hardBox(px - 6, ly - 6, 12, 12, i === 3 && ph < 0.4 ? pal.yellow : pal.lime, pal, 2, 2);
+          const px = 16 + ph * (endLineX - 22);
+          hardBox(px - 5, ly - 5, 10, 10, i === 3 && ph < 0.4 ? pal.yellow : pal.lime, pal, 1.5, 1.5);
         }
       }
 
@@ -660,15 +705,15 @@
       ctx.beginPath();
       for (let s = 0; s < 8; s++) {
         const a = (s / 8) * Math.PI * 2;
-        if (s === 0) ctx.moveTo(Math.cos(a) * r + 4, Math.sin(a) * r + 4);
-        else ctx.lineTo(Math.cos(a) * r + 4, Math.sin(a) * r + 4);
+        if (s === 0) ctx.moveTo(Math.cos(a) * r + 3, Math.sin(a) * r + 3);
+        else ctx.lineTo(Math.cos(a) * r + 3, Math.sin(a) * r + 3);
       }
       ctx.closePath();
       ctx.fill();
 
       ctx.fillStyle = pal.yellow;
       ctx.strokeStyle = pal.ink;
-      ctx.lineWidth = 2.2;
+      ctx.lineWidth = 2;
       ctx.beginPath();
       for (let s = 0; s < 8; s++) {
         const a = (s / 8) * Math.PI * 2;
@@ -682,16 +727,20 @@
 
       ctx.fillStyle = '#141413';
       ctx.textAlign = 'center';
-      ctx.font = '700 10.5px "Space Mono", monospace';
+      ctx.font = '700 ' + (isCompact ? '9px' : '10.5px') + ' "Space Mono", monospace';
       ctx.fillText('SHA-256', cx, cy + 3);
 
       // Postgres Matrix
-      const gx = cw - 102;
+      const cols = isCompact ? 3 : 4;
+      const cellW = isCompact ? 11 : 14;
+      const colStep = isCompact ? 15 : 20;
+      const rowStep = isCompact ? 22 : 28;
+      const gx = cw - (cols * colStep) - (isCompact ? 8 : 22);
       const gy = ch * 0.18;
       for (let row = 0; row < 5; row++) {
-        for (let col = 0; col < 4; col++) {
+        for (let col = 0; col < cols; col++) {
           const lit = ((Math.floor(t * 3.5) + row * 3 + col) % 6) !== 0;
-          hardBox(gx + col * 20, gy + row * 28 - 7, 14, 14, lit ? pal.lime : pal.alt, pal, 2, 2);
+          hardBox(gx + col * colStep, gy + row * rowStep - 5, cellW, cellW, lit ? pal.lime : pal.alt, pal, 1.5, 1.5);
         }
       }
       ctx.restore();
@@ -701,67 +750,76 @@
     function sceneMonteCarlo(alpha, t, pal) {
       ctx.save();
       ctx.globalAlpha = alpha;
-      const splitX = cw * 0.25;
+      const isCompact = cw < 480;
+      const splitX = isCompact ? cw * 0.2 : cw * 0.25;
       const cy = ch * 0.5;
 
       ctx.strokeStyle = pal.ink;
-      ctx.lineWidth = 2.2;
+      ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.moveTo(24, cy);
+      ctx.moveTo(16, cy);
       ctx.lineTo(splitX, cy);
-      ctx.lineTo(cw * 0.42, ch * 0.28);
+      ctx.lineTo(cw * (isCompact ? 0.38 : 0.42), ch * 0.28);
       ctx.moveTo(splitX, cy);
-      ctx.lineTo(cw * 0.42, ch * 0.72);
+      ctx.lineTo(cw * (isCompact ? 0.38 : 0.42), ch * 0.72);
       ctx.stroke();
 
       for (let k = 0; k < 8; k++) {
         const p = (t * 0.55 + k / 8) % 1;
         const topBranch = k % 3 !== 0;
         let px, py;
+        const endX = cw * (isCompact ? 0.38 : 0.42);
         if (p < 0.4) {
           const u = p / 0.4;
-          px = 24 + (splitX - 24) * u;
+          px = 16 + (splitX - 16) * u;
           py = cy;
         } else {
           const u = (p - 0.4) / 0.6;
-          px = splitX + (cw * 0.42 - splitX) * u;
+          px = splitX + (endX - splitX) * u;
           py = cy + ((topBranch ? ch * 0.28 : ch * 0.72) - cy) * u;
         }
-        hardBox(px - 5, py - 5, 10, 10, topBranch ? pal.sky : pal.pink, pal, 2, 2);
+        hardBox(px - 4, py - 4, 8, 8, topBranch ? pal.sky : pal.pink, pal, 1.5, 1.5);
       }
 
-      hardBox(splitX - 24, cy - 17, 48, 34, pal.sky, pal, 3, 3);
+      const splitBoxW = isCompact ? 38 : 48;
+      const splitBoxH = isCompact ? 26 : 34;
+      hardBox(splitX - splitBoxW / 2, cy - splitBoxH / 2, splitBoxW, splitBoxH, pal.sky, pal, 2, 2);
       ctx.fillStyle = '#141413';
       ctx.textAlign = 'center';
-      ctx.font = '700 10px "Space Mono", monospace';
-      ctx.fillText('70/30', splitX, cy + 4);
+      ctx.font = '700 ' + (isCompact ? '8.5px' : '10px') + ' "Space Mono", monospace';
+      ctx.fillText('70/30', splitX, cy + (isCompact ? 3 : 4));
 
-      const cx0 = cw * 0.46;
-      const chartW = cw * 0.48;
+      const cx0 = isCompact ? cw * 0.42 : cw * 0.46;
+      const chartW = cw - cx0 - (isCompact ? 12 : 24);
       const baseLineY = ch * 0.8;
-      const maxH = ch * 0.56;
+      const maxH = ch * 0.54;
       const stepW = chartW / BINS;
-      const barW = Math.max(6, stepW * 0.7);
+      const barW = Math.max(3.5, stepW * 0.68);
       const wave = 0.88 + Math.sin(t * 1.5) * 0.08;
 
       for (let i = 0; i < BINS; i++) {
         const bx = cx0 + i * stepW;
         const h1 = histA[i] * maxH * wave;
         const h2 = histB[i] * maxH * wave * 0.7;
-        hardBox(bx, baseLineY - h2, barW, h2, pal.pink, pal, 2, 2);
-        hardBox(bx + 2, baseLineY - h1, barW * 0.78, h1, pal.sky, pal, 2, 2);
+        hardBox(bx, baseLineY - h2, barW, h2, pal.pink, pal, 1.5, 1.5);
+        hardBox(bx + 1.5, baseLineY - h1, barW * 0.78, h1, pal.sky, pal, 1.5, 1.5);
       }
 
       ctx.strokeStyle = pal.ink;
       ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.moveTo(cx0 - 6, baseLineY);
+      ctx.moveTo(cx0 - 4, baseLineY);
       ctx.lineTo(cx0 + chartW + 4, baseLineY);
       ctx.stroke();
 
-      hardBox(cx0 + chartW * 0.18, ch * 0.08, 178, 24, pal.yellow, pal, 3, 3);
+      const badgeW = isCompact ? Math.min(140, chartW * 0.95) : 178;
+      const badgeH = isCompact ? 20 : 24;
+      const badgeX = cx0 + (chartW - badgeW) / 2;
+      hardBox(badgeX, ch * 0.08, badgeW, badgeH, pal.yellow, pal, 2, 2);
       ctx.fillStyle = '#141413';
-      ctx.fillText('95% CI · 50k TRIALS', cx0 + chartW * 0.18 + 89, ch * 0.08 + 15);
+      ctx.textAlign = 'center';
+      ctx.font = '700 ' + (isCompact ? '8px' : '10px') + ' "Space Mono", monospace';
+      ctx.fillText(isCompact ? '95% CI · 50k TRIALS' : '95% CI · 50,000 TRIALS', badgeX + badgeW / 2, ch * 0.08 + (isCompact ? 13 : 15));
       ctx.restore();
     }
 
@@ -769,18 +827,20 @@
     function sceneBilling(alpha, t, pal) {
       ctx.save();
       ctx.globalAlpha = alpha;
-      const cx = cw * 0.27;
+      const isCompact = cw < 480;
+
+      const cx = isCompact ? cw * 0.22 : cw * 0.27;
       const cy = ch * 0.5;
-      const R = Math.min(cw, ch) * 0.28;
+      const R = Math.min(cw * (isCompact ? 0.16 : 0.22), ch * (isCompact ? 0.25 : 0.28));
 
       ctx.fillStyle = pal.shadow;
       ctx.beginPath();
-      ctx.arc(cx + 4, cy + 4, R, 0, Math.PI * 2);
+      ctx.arc(cx + 3, cy + 3, R, 0, Math.PI * 2);
       ctx.fill();
 
       ctx.fillStyle = pal.surface;
       ctx.strokeStyle = pal.ink;
-      ctx.lineWidth = 2.2;
+      ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.arc(cx, cy, R, 0, Math.PI * 2);
       ctx.fill();
@@ -790,45 +850,57 @@
         const ang = (i / 24) * Math.PI * 2 - Math.PI * 0.5;
         const lit = i <= ((t * 10) % 24);
         ctx.strokeStyle = lit ? pal.coral : pal.ink;
-        ctx.lineWidth = lit ? 3.5 : 1.5;
+        ctx.lineWidth = lit ? (isCompact ? 2.5 : 3.5) : 1.5;
         ctx.beginPath();
-        ctx.moveTo(cx + Math.cos(ang) * (R - 14), cy + Math.sin(ang) * (R - 14));
-        ctx.lineTo(cx + Math.cos(ang) * (R - 4), cy + Math.sin(ang) * (R - 4));
+        ctx.moveTo(cx + Math.cos(ang) * (R - (isCompact ? 8 : 14)), cy + Math.sin(ang) * (R - (isCompact ? 8 : 14)));
+        ctx.lineTo(cx + Math.cos(ang) * (R - 3), cy + Math.sin(ang) * (R - 3));
         ctx.stroke();
       }
 
-      hardBox(cx - 42, cy - 16, 84, 32, pal.yellow, pal, 3, 3);
+      const badgeW = isCompact ? 68 : 84;
+      const badgeH = isCompact ? 24 : 32;
+      hardBox(cx - badgeW / 2, cy - badgeH / 2, badgeW, badgeH, pal.yellow, pal, 2, 2);
       ctx.fillStyle = '#141413';
       ctx.textAlign = 'center';
-      ctx.font = '700 10.5px "Space Mono", monospace';
-      ctx.fillText('$1 = 1000', cx, cy + 4);
+      ctx.font = '700 ' + (isCompact ? '9px' : '10.5px') + ' "Space Mono", monospace';
+      ctx.fillText('$1=1000', cx, cy + (isCompact ? 3 : 4));
 
-      const dx = cw * 0.53;
-      const dy = ch * 0.13;
-      const dw = cw * 0.4;
-      const dh = ch * 0.74;
-      hardBox(dx, dy, dw, dh, pal.surface, pal, 5, 5);
-      hardBox(dx, dy, dw, 32, pal.yellow, pal, 0, 0);
+      const dx = isCompact ? cx + R + 12 : cw * 0.52;
+      const dy = ch * 0.1;
+      const dw = Math.max(140, cw - dx - (isCompact ? 10 : 20));
+      const dh = ch * 0.8;
+      hardBox(dx, dy, dw, dh, pal.surface, pal, 4, 4);
+      hardBox(dx, dy, dw, isCompact ? 26 : 32, pal.yellow, pal, 0, 0);
 
       ctx.fillStyle = '#141413';
       ctx.textAlign = 'left';
-      ctx.font = '700 10px "Space Mono", monospace';
-      ctx.fillText('INVOICE DRAFT // EXACT', dx + 12, dy + 20);
+      ctx.font = '700 ' + (isCompact ? '8.5px' : '10px') + ' "Space Mono", monospace';
+      ctx.fillText(isCompact ? 'INVOICE // EXACT' : 'INVOICE DRAFT // EXACT', dx + (isCompact ? 8 : 12), dy + (isCompact ? 16 : 20));
 
-      const rows = [
-        { k: 'TIER 1 ROLLUP', v: '482,500 u', col: pal.lime },
-        { k: 'TIER 2 VOLUME', v: '267,500 u', col: pal.sky },
-        { k: 'TAX LEDGER', v: '038,250 u', col: pal.pink },
-        { k: 'FLOAT DRIFT', v: '0.000000', col: pal.yellow }
-      ];
+      const rows = isCompact
+        ? [
+            { k: 'TIER 1', v: '482.5k u', col: pal.lime },
+            { k: 'TIER 2', v: '267.5k u', col: pal.sky },
+            { k: 'TAX', v: '38.2k u', col: pal.pink },
+            { k: 'DRIFT', v: '0.000', col: pal.yellow }
+          ]
+        : [
+            { k: 'TIER 1 ROLLUP', v: '482,500 u', col: pal.lime },
+            { k: 'TIER 2 VOLUME', v: '267,500 u', col: pal.sky },
+            { k: 'TAX LEDGER', v: '038,250 u', col: pal.pink },
+            { k: 'FLOAT DRIFT', v: '0.000000', col: pal.yellow }
+          ];
+
+      const rowGap = isCompact ? (dh - 34) / 4 : 40;
       rows.forEach((rw, idx) => {
-        const ry = dy + 54 + idx * 40;
+        const ry = dy + (isCompact ? 40 : 54) + idx * rowGap;
         ctx.fillStyle = pal.ink;
+        ctx.font = '700 ' + (isCompact ? '8.5px' : '10px') + ' "Space Mono", monospace';
         ctx.textAlign = 'left';
-        ctx.fillText(rw.k, dx + 12, ry);
+        ctx.fillText(rw.k, dx + (isCompact ? 8 : 12), ry);
         ctx.textAlign = 'right';
-        ctx.fillText(rw.v, dx + dw - 12, ry);
-        hardBox(dx + 12, ry + 7, (dw - 24) * 0.72, 9, rw.col, pal, 2, 2);
+        ctx.fillText(rw.v, dx + dw - (isCompact ? 8 : 12), ry);
+        hardBox(dx + (isCompact ? 8 : 12), ry + 5, (dw - (isCompact ? 16 : 24)) * 0.72, isCompact ? 6 : 9, rw.col, pal, 1.5, 1.5);
       });
       ctx.restore();
     }
@@ -837,16 +909,17 @@
     function scenePulse(alpha, t, pal) {
       ctx.save();
       ctx.globalAlpha = alpha;
-      const lp = 56;
-      const pw = cw - lp - 24;
+      const isCompact = cw < 480;
+      const lp = isCompact ? 40 : 56;
+      const pw = cw - lp - (isCompact ? 12 : 24);
 
       // Yellow quiet-hour band
       const bandY = ch * 0.65;
-      hardBox(lp, bandY, pw, ch * 0.2, pal.yellow, pal, 3, 3);
+      hardBox(lp, bandY, pw, ch * 0.2, pal.yellow, pal, 2, 2);
       ctx.fillStyle = '#141413';
-      ctx.font = '700 9.5px "Space Mono", monospace';
+      ctx.font = '700 ' + (isCompact ? '8px' : '9.5px') + ' "Space Mono", monospace';
       ctx.textAlign = 'left';
-      ctx.fillText('QUIET-HOUR NOISE SUPPRESSED', lp + 10, bandY + 20);
+      ctx.fillText(isCompact ? 'QUIET-HOUR NOISE FILTERED' : 'QUIET-HOUR NOISE SUPPRESSED', lp + 8, bandY + (isCompact ? 15 : 20));
 
       const ys = [0.18, 0.3, 0.42, 0.52, 0.6];
       const gwCols = [pal.lime, pal.sky, pal.coral, pal.ink, pal.ink];
@@ -856,31 +929,32 @@
         const y0 = ch * ys[g];
         const deg = g === 2;
         ctx.beginPath();
-        for (let sx = 0; sx <= pw; sx += 5) {
+        for (let sx = 0; sx <= pw; sx += 4) {
           const nx = sx / pw;
-          let wy = y0 + Math.sin(nx * 13 - t * 2.4 + g) * 5;
+          let wy = y0 + Math.sin(nx * 13 - t * 2.4 + g) * (isCompact ? 3.5 : 5);
           if (deg) {
             const d = Math.abs(nx - dip);
             if (d < 0.14) {
               const bell = Math.cos((d / 0.14) * Math.PI * 0.5);
-              wy += bell * bell * (ch * 0.27);
+              wy += bell * bell * (ch * 0.25);
             }
           }
           if (sx === 0) ctx.moveTo(lp + sx, wy);
           else ctx.lineTo(lp + sx, wy);
         }
         ctx.strokeStyle = gwCols[g];
-        ctx.lineWidth = deg ? 3 : 2;
+        ctx.lineWidth = deg ? (isCompact ? 2.5 : 3) : (isCompact ? 1.5 : 2);
         ctx.stroke();
 
         ctx.fillStyle = deg ? pal.coral : pal.ink;
         ctx.textAlign = 'right';
-        ctx.fillText('GW-' + (g + 1), lp - 10, y0 + 3);
+        ctx.font = '700 ' + (isCompact ? '8px' : '9px') + ' "Space Mono", monospace';
+        ctx.fillText('G' + (g + 1), lp - 6, y0 + 3);
       }
 
       const rx = lp + dip * pw;
-      const ry = ch * ys[2] + ch * 0.25;
-      hardBox(rx - 10, ry - 10, 20, 20, pal.coral, pal, 2, 2);
+      const ry = ch * ys[2] + ch * 0.23;
+      hardBox(rx - 8, ry - 8, 16, 16, pal.coral, pal, 1.5, 1.5);
       ctx.restore();
     }
 
@@ -1070,5 +1144,18 @@
         });
       }
     }
+
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (typeof window.ScrollTrigger !== 'undefined') {
+          window.ScrollTrigger.refresh();
+        }
+        if (redrawGrid) redrawGrid();
+        if (redrawMachine) redrawMachine();
+        if (redrawStage) redrawStage();
+      }, 120);
+    });
   });
 })();

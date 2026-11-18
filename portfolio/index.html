@@ -42,7 +42,7 @@
             <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
-            <span id="theme-label">Dark</span>
+            <span id="theme-label" class="theme-label hide-xs">Dark</span>
           </button>
 
           <a class="nb-btn nb-btn-sm nb-coral" href="./resumes/Anish_Thota_Resume.pdf" target="_blank" rel="noopener">
@@ -65,7 +65,7 @@
             </div>
 
             <h1 class="hero-title" data-hero-anim>
-              I build backend services, <span class="hl-yellow">payment workflows</span>and event-driven APIs.
+              I build backend services, <span class="hl-yellow">payment workflows</span> and event-driven APIs.
             </h1>
 
             <p class="hero-bio" data-hero-anim>
@@ -107,7 +107,10 @@
                 <span class="machine-dots" aria-hidden="true">
                   <span></span><span></span><span></span>
                 </span>
-                <span class="machine-title">LIVE PACKET CONVEYOR · CLICK TO BURST</span>
+                <span class="machine-title">
+                  <span class="title-full">LIVE PACKET CONVEYOR · CLICK TO BURST</span>
+                  <span class="title-short">CONVEYOR · TAP TO BURST</span>
+                </span>
               </div>
 
               <canvas id="hero-machine" aria-label="Interactive backend conveyor simulation"></canvas>
@@ -139,7 +142,10 @@
         <div class="container">
           <div class="section-top-row">
             <h2 class="section-heading">Selected Systems</h2>
-            <span class="section-sub">Scroll gently or pick a folder tab</span>
+            <span class="section-sub">
+              <span class="sub-desktop">Scroll gently or pick a folder tab</span>
+              <span class="sub-touch">Tap tabs or swipe to inspect</span>
+            </span>
           </div>
 
           <!-- Flush Colored Folder Tabs -->
@@ -277,7 +283,7 @@
         </div>
 
         <div class="bento-grid">
-          <article class="nb-card award-card nb-pink col-12" data-stamp-reveal>
+          <article class="nb-card award-card col-12" data-stamp-reveal>
             <div class="award-layout">
               <div>
                 <span class="mono-badge nb-surface">3rd Place Nationwide · Out of 3,000+ Teams</span>
@@ -288,7 +294,7 @@
               </div>
               <div class="starburst-wrap" aria-hidden="true">
                 <svg class="starburst-svg" viewBox="0 0 120 120" width="110" height="110">
-                  <polygon class="starburst-poly" points="60,4 70,22 88,10 86,30 108,28 96,46 116,56 96,68 108,86 86,84 88,104 70,92 60,112 50,92 32,104 34,84 12,86 24,68 4,56 24,46 12,28 34,30 32,10 50,22" fill="#FFD23F" stroke="#141413" stroke-width="3" stroke-linejoin="round" />
+                  <polygon class="starburst-poly" points="60,4 70,22 88,10 86,30 108,28 96,46 116,56 96,68 108,86 86,84 88,104 70,92 60,112 50,92 32,104 34,84 12,86 24,68 4,56 24,46 12,28 34,30 32,10 50,22" fill="#FFD23F" stroke="currentColor" stroke-width="3" stroke-linejoin="round" />
                   <text x="60" y="65" text-anchor="middle" fill="#141413" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="22">#3</text>
                 </svg>
               </div>
@@ -341,7 +347,7 @@
     <!-- ==================== NEO-BRUTALIST CLOSING BANNER ==================== -->
     <footer class="footer-band">
       <div class="container">
-        <div class="nb-card footer-poster nb-yellow">
+        <div class="nb-card footer-poster">
           <div class="footer-top">
             <div>
               <h2 class="footer-heading">Let’s talk backend systems.</h2>
