@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <style>
+    rect.bg { fill: #0A0B0D; }
+    text { fill: #F3F4F6; font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700; font-size: 27px; letter-spacing: -1.5px; }
+    circle.dot { fill: #10B981; }
+    @media (prefers-color-scheme: light) {
+      rect.bg { fill: #FAFAFA; stroke: rgba(17, 19, 24, 0.14); stroke-width: 2; }
+      text { fill: #111318; }
+      circle.dot { fill: #059669; }
+    }
+  </style>
+  <rect class="bg" width="64" height="64" rx="14" />
+  <text x="11" y="42">AT</text>
+  <circle class="dot" cx="50" cy="40" r="4.5" />
+</svg>

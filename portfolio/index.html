@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anish Thota — Backend Software Engineer</title>
+  <meta name="description" content="Anish Thota — Backend Software Engineer building payment workflows, event-driven billing pipelines, reconciliation agents, and Python/AWS APIs." />
+  <meta property="og:title" content="Anish Thota — Backend Software Engineer" />
+  <meta property="og:description" content="Backend Software Engineer working in Python, SQL, and AWS on payment systems, reconciliation pipelines, and resilient APIs." />
+  <meta property="og:type" content="website" />
+
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+
+  <!-- Interactive Blueprint Cross-Tick Background Field -->
+  <canvas id="bg-grid-canvas" aria-hidden="true"></canvas>
+
+  <!-- ==================== TOP NEO-BRUTALIST NAVIGATION ==================== -->
+  <header class="top-bar-wrap">
+    <div class="container">
+      <div class="top-bar">
+        <a href="#overview" class="brand-lockup" aria-label="Anish Thota Home">
+          <span class="brand-stamp">AT</span>
+          <span class="brand-name">Anish Thota</span>
+        </a>
+
+        <nav class="top-nav" aria-label="Primary navigation">
+          <a class="nav-item hide-sm" href="#systems">Systems</a>
+          <a class="nav-item hide-sm" href="#experience">Experience</a>
+          <a class="nav-item hide-sm" href="#credentials">Stack</a>
+
+          <button class="nb-btn nb-btn-sm nb-surface" id="theme-toggle" type="button" aria-label="Toggle light and dark theme">
+            <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+            </svg>
+            <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            <span id="theme-label">Dark</span>
+          </button>
+
+          <a class="nb-btn nb-btn-sm nb-coral" href="./resumes/Anish_Thota_Resume.pdf" target="_blank" rel="noopener">
+            <span>Resume ↗</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-shell">
+
+    <!-- ==================== HERO (PERSONAL, HUMAN SCALE, BACKEND ENGINEER) ==================== -->
+    <section class="hero" id="overview">
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-left">
+            <div class="kicker-chip" data-hero-anim>
+              Anish Thota · Backend Software Engineer · Hyderabad
+            </div>
+
+            <h1 class="hero-title" data-hero-anim>
+              I build backend services, <span class="hl-yellow">payment workflows</span>and event-driven APIs.
+            </h1>
+
+            <p class="hero-bio" data-hero-anim>
+              Most of my work is in Python and SQL on AWS—writing the code where webhooks, settlement files, and databases meet. I focus on clean schemas, safe retries that never count a transaction twice, and keeping heavy background jobs off the live checkout path.
+            </p>
+
+            <div class="hero-actions" data-hero-anim>
+              <a class="nb-btn nb-yellow" href="./resumes/Anish_Thota_Resume.pdf" target="_blank" rel="noopener">
+                <span>Download Resume</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+              </a>
+
+              <button class="nb-btn nb-surface copy-btn" id="copy-email" type="button" aria-label="Copy email address anishthota96@gmail.com">
+                <svg class="icon-copy" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <svg class="icon-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="copy-label">anishthota96@gmail.com</span>
+              </button>
+            </div>
+
+            <div class="hero-links" data-hero-anim>
+              <a href="https://github.com/Anish6964" target="_blank" rel="noopener">GitHub ↗</a>
+              <span>/</span>
+              <a href="https://www.linkedin.com/in/anishthota" target="_blank" rel="noopener">LinkedIn ↗</a>
+            </div>
+          </div>
+
+          <div class="hero-right" data-hero-anim>
+            <div class="machine-box">
+              <div class="machine-titlebar">
+                <span class="machine-dots" aria-hidden="true">
+                  <span></span><span></span><span></span>
+                </span>
+                <span class="machine-title">LIVE PACKET CONVEYOR · CLICK TO BURST</span>
+              </div>
+
+              <canvas id="hero-machine" aria-label="Interactive backend conveyor simulation"></canvas>
+
+              <div class="machine-footer">
+                <span id="machine-stats" class="tabular">COMMITTED: 128 · RETRIES DROPPED: 16</span>
+                <span>API → SHA-256 → DB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SCROLL-VELOCITY KINETIC MARQUEE ==================== -->
+    <div class="marquee-section" aria-hidden="true">
+      <div class="marquee-strip">
+        <div class="marquee-track" id="marquee-track">
+          <span>PYTHON · SQL · AWS LAMBDA · POSTGRESQL · EVENT-DRIVEN BILLING · SHA-256 DEDUPE · MONTE CARLO ROUTING · KAFKA · TERRAFORM IaC · </span>
+          <span>PYTHON · SQL · AWS LAMBDA · POSTGRESQL · EVENT-DRIVEN BILLING · SHA-256 DEDUPE · MONTE CARLO ROUTING · KAFKA · TERRAFORM IaC · </span>
+          <span>PYTHON · SQL · AWS LAMBDA · POSTGRESQL · EVENT-DRIVEN BILLING · SHA-256 DEDUPE · MONTE CARLO ROUTING · KAFKA · TERRAFORM IaC · </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 4-TAB NEO-BRUTALIST FOLDER STAGE (195vh SCRUB) ==================== -->
+    <section class="folder-section" id="systems">
+      <div class="folder-sticky">
+        <div class="container">
+          <div class="section-top-row">
+            <h2 class="section-heading">Selected Systems</h2>
+            <span class="section-sub">Scroll gently or pick a folder tab</span>
+          </div>
+
+          <!-- Flush Colored Folder Tabs -->
+          <div class="folder-tabs" role="tablist" aria-label="Selected systems chapters">
+            <button class="folder-tab active" type="button" data-chapter="0" data-accent="lime">01 Recon</button>
+            <button class="folder-tab" type="button" data-chapter="1" data-accent="sky">02 Simulator</button>
+            <button class="folder-tab" type="button" data-chapter="2" data-accent="yellow">03 Billing</button>
+            <button class="folder-tab" type="button" data-chapter="3" data-accent="coral">04 Outages</button>
+          </div>
+
+          <!-- Unified Two-Pane Folder Board (Zero Nested Cards) -->
+          <div class="folder-board">
+            <div class="folder-left">
+              <div class="stage-progress-track" aria-hidden="true">
+                <div class="stage-progress-fill" id="stage-progress-fill"></div>
+              </div>
+
+              <div class="chapter-container">
+                <article class="chapter-panel active" data-chapter-panel="0" data-accent="lime">
+                  <div class="chapter-tag">01 / PYTHON · AWS LAMBDA · SFTP / S3 · POSTGRESQL</div>
+                  <h3 class="chapter-title">Settlement Watcher &amp; Follow-Up Agent</h3>
+                  <p class="chapter-desc">
+                    Watches daily partner CSV settlement reports across SFTP and S3 (1,000+ transactions/day), fingerprints every file with SHA-256 so retries never double-count rows, and runs context-aware email threads past cutoff deadlines.
+                  </p>
+                  <div class="chapter-note">
+                    <strong>How failures stay clean:</strong> 5-rule matching across Pending, Arrived, Delayed, Missing, and Malformed states. PostgreSQL row locks prevent duplicate escalations, and prompt caching trims LLM token cost.
+                  </div>
+                </article>
+
+                <article class="chapter-panel" data-chapter-panel="1" data-accent="sky">
+                  <div class="chapter-tag">02 / PYTHON · SPRING BOOT · READ-REPLICA SQL</div>
+                  <h3 class="chapter-title">50,000-Trial Monte Carlo Traffic Router</h3>
+                  <p class="chapter-desc">
+                    Simulates 50,000 card routing trials over 30 days of historical BIN data across volume, amount, and currency splits—blocking any unverified gateway split from going live.
+                  </p>
+                  <div class="chapter-note">
+                    <strong>How checkout stays fast:</strong> All 30-day historical scans execute against a dedicated read-only database pool so simulation bursts never touch live checkout writes.
+                  </div>
+                </article>
+
+                <article class="chapter-panel" data-chapter-panel="2" data-accent="yellow">
+                  <div class="chapter-tag">03 / AWS EVENTBRIDGE · LAMBDA · POSTGRESQL · SES</div>
+                  <h3 class="chapter-title">Event-Driven Millicent Billing Engine</h3>
+                  <p class="chapter-desc">
+                    Totals monthly transaction volume per client, applies tiered and custom fee schedules with taxes, and stages draft PDF invoices for finance review before emailing.
+                  </p>
+                  <div class="chapter-note">
+                    <strong>Zero float drift:</strong> Stores all currency amounts in whole-number millicents ($1 = 1,000 units), filters sandbox tenants automatically, and prevents duplicate bills per cycle.
+                  </div>
+                </article>
+
+                <article class="chapter-panel" data-chapter-panel="3" data-accent="coral">
+                  <div class="chapter-tag">04 / PYTHON · RDS · RAPYD · NTT DATA · RAZORPAY</div>
+                  <h3 class="chapter-title">Gateway Outage Monitor &amp; Checkout Flows</h3>
+                  <p class="chapter-desc">
+                    Tracks live approval rates across 5 payment gateways against rolling baselines while ignoring quiet-hour noise, alongside direct card, UPI, wallet, and webhook integrations.
+                  </p>
+                  <div class="chapter-note">
+                    <strong>Reliable alerts &amp; security:</strong> UTC-normalized sliding windows track lost vs. recovered volume, HMAC/cryptographic signature checks validate callbacks, and an 8-role matrix isolates tenant access.
+                  </div>
+                </article>
+              </div>
+            </div>
+
+            <div class="folder-right">
+              <div class="canvas-topbar">
+                <span class="canvas-status">
+                  <span class="canvas-dot" id="hud-dot"></span>
+                  <span id="stage-hud-left">CH 01 // SHA-256 DEDUPE GATE</span>
+                </span>
+                <span id="stage-hud-right" class="tabular">1,000+ TXNS/DAY · 5 STATES</span>
+              </div>
+
+              <canvas id="stage-canvas" aria-label="Interactive backend system schematic"></canvas>
+
+              <div class="canvas-bottombar">
+                <span id="stage-metrics" class="tabular">HASH VERIFIED · ZERO DUPLICATE ROWS · UTC LOCKED</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== EXPERIENCE (EMPLOYERS LIVE STRICTLY HERE) ==================== -->
+    <section class="content-section" id="experience">
+      <div class="container">
+        <div class="section-top-row">
+          <h2 class="section-heading">Experience</h2>
+          <span class="section-sub">Production &amp; Consulting</span>
+        </div>
+
+        <div class="exp-grid">
+          <article class="nb-card exp-card" data-stamp-reveal>
+            <div class="exp-header">
+              <div>
+                <h3 class="exp-role">Backend Software Engineer</h3>
+                <div class="exp-org">PiResearch Labs / PayIntelli · Payments Orchestration Platform · Hyderabad</div>
+              </div>
+              <span class="date-sticker nb-yellow tabular">Aug 2025 — Present</span>
+            </div>
+            <ul class="exp-bullets">
+              <li>Built and deployed the settlement watcher and follow-up agent (<strong>Pi Recon</strong>) across a 50+ Lambda backend handling <strong>1,000+ daily transactions</strong>, automating SFTP/S3 cutoff checks, 5-rule matching, and provider escalation threads.</li>
+              <li>Built the monthly <strong>billing and invoicing pipeline</strong> on EventBridge, Lambda, PostgreSQL, and SES—automating usage rollups, custom client pricing in integer millicents, draft review, and PDF delivery.</li>
+              <li>Implemented an <strong>8-role, 3-tier (Read/Write/Delete) authorization layer</strong> backed by Lambda authorizers and DynamoDB access mappings, plus an <strong>8-type PostgreSQL ticket state machine</strong> for failed payments and webhook alerts.</li>
+              <li>Engineered the <strong>50,000-trial Monte Carlo A/B routing simulator</strong> over a dedicated read-replica and the <strong>5-gateway outage monitor (Pi Pulse)</strong> with baseline anomaly detection.</li>
+              <li>Integrated <strong>NTT DATA, Razorpay, and Rapyd</strong> across card, UPI, wallet, payout, and dispute flows with cryptographic webhook verification and idempotent refund handling, plus an internal Python <strong>MCP server</strong> for safe PostgreSQL lookups.</li>
+            </ul>
+          </article>
+
+          <article class="nb-card exp-card" data-stamp-reveal>
+            <div class="exp-header">
+              <div>
+                <h3 class="exp-role">Freelance Backend Developer</h3>
+                <div class="exp-org">Independent Consultant · International Clients · Remote</div>
+              </div>
+              <span class="date-sticker nb-sky tabular">2023 — 2025</span>
+            </div>
+            <ul class="exp-bullets">
+              <li>Built an automated healthcare <strong>ETL pipeline</strong> on AWS Glue and S3, provisioning cloud infrastructure with <strong>Terraform (IaC)</strong> and automated <strong>GitHub Actions CI/CD</strong> workflows.</li>
+              <li>Developed a real-time <strong>IoT event pipeline</strong> streaming sensor data through <strong>Apache Kafka</strong> into PostgreSQL, serving live threshold alerts over FastAPI WebSockets in Docker Compose, alongside scheduled batch ingestion services on GCP Cloud Run.</li>
+              <li>Implemented an internal document <strong>Q&amp;A service (RAG)</strong> using Python, LangChain, AWS Kendra, and SageMaker, plus a serverless analytics pipeline on S3, Athena, and QuickSight.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== RECOGNITION & STACK GRID ==================== -->
+    <section class="content-section" id="credentials">
+      <div class="container">
+        <div class="section-top-row">
+          <h2 class="section-heading">Recognition &amp; Stack</h2>
+          <span class="section-sub">Awards &amp; Core Tooling</span>
+        </div>
+
+        <div class="bento-grid">
+          <article class="nb-card award-card nb-pink col-12" data-stamp-reveal>
+            <div class="award-layout">
+              <div>
+                <span class="mono-badge nb-surface">3rd Place Nationwide · Out of 3,000+ Teams</span>
+                <h3 class="bento-title">NABARD @ Global FinTech Fest 2026 — Dhansetu</h3>
+                <p class="bento-copy">
+                  Co-built a cash-flow and credit-risk platform for rural micro-enterprises (Mumbai · Felicitated by NABARD, NPCI &amp; FCC). Built the FastAPI market-benchmark endpoints over PostgreSQL views, hardened database connection pooling under load, and automated GCP deployment with GitHub Actions and systemd.
+                </p>
+              </div>
+              <div class="starburst-wrap" aria-hidden="true">
+                <svg class="starburst-svg" viewBox="0 0 120 120" width="110" height="110">
+                  <polygon class="starburst-poly" points="60,4 70,22 88,10 86,30 108,28 96,46 116,56 96,68 108,86 86,84 88,104 70,92 60,112 50,92 32,104 34,84 12,86 24,68 4,56 24,46 12,28 34,30 32,10 50,22" fill="#FFD23F" stroke="#141413" stroke-width="3" stroke-linejoin="round" />
+                  <text x="60" y="65" text-anchor="middle" fill="#141413" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="22">#3</text>
+                </svg>
+              </div>
+            </div>
+          </article>
+
+          <article class="nb-card stack-card col-4" data-stamp-reveal>
+            <div class="stack-card-head nb-sky">Languages &amp; Core</div>
+            <div class="stack-card-body">
+              Python · SQL · FastAPI · REST APIs · WebSockets · Bash · Object-Oriented Design
+            </div>
+          </article>
+
+          <article class="nb-card stack-card col-4" data-stamp-reveal>
+            <div class="stack-card-head nb-yellow">GenAI &amp; Agentic Tooling</div>
+            <div class="stack-card-body">
+              Agentic AI Solutions · LangChain · LangGraph · Model Context Protocol (MCP) · Retrieval-Augmented Generation (RAG) · Prompt Engineering · Anthropic Claude API · OpenAI API
+            </div>
+          </article>
+
+          <article class="nb-card stack-card col-4" data-stamp-reveal>
+            <div class="stack-card-head nb-coral">DevOps, IaC &amp; Observability</div>
+            <div class="stack-card-body">
+              Terraform (IaC) · Docker · GitHub Actions · CI/CD · Git · Linux · Prometheus · Grafana
+            </div>
+          </article>
+
+          <article class="nb-card stack-card col-6" data-stamp-reveal>
+            <div class="stack-card-head nb-lime">Cloud Platforms (AWS &amp; GCP)</div>
+            <div class="stack-card-body">
+              AWS Lambda · S3 · EventBridge · API Gateway · SQS · SNS · SES · RDS · DynamoDB · Glue · Athena · QuickSight · SageMaker · Kendra · CloudWatch · EC2 · GCP Cloud Run · Cloud Storage · Cloud SQL
+            </div>
+          </article>
+
+          <article class="nb-card stack-card col-6" data-stamp-reveal>
+            <div class="stack-card-head nb-sky">Data Pipelines, Databases &amp; Exploring</div>
+            <div class="stack-card-body">
+              PostgreSQL · MySQL · Apache Kafka · ETL/ELT Pipelines · Batch Processing · Data Ingestion · Data Modeling · S3 Data Lake · Read-Replica Optimization · Exploring: Apache Spark, PySpark, Databricks, Snowflake, Apache Airflow
+            </div>
+          </article>
+
+          <article class="nb-card cred-strip col-12" data-stamp-reveal>
+            <span>AWS Certified Cloud Practitioner</span>
+            <span>B.Tech in Electronics &amp; Communications Engineering · ALIET (2019 – 2023)</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== NEO-BRUTALIST CLOSING BANNER ==================== -->
+    <footer class="footer-band">
+      <div class="container">
+        <div class="nb-card footer-poster nb-yellow">
+          <div class="footer-top">
+            <div>
+              <h2 class="footer-heading">Let’s talk backend systems.</h2>
+              <p class="footer-sub">Open to Backend Software Engineer roles and interesting infrastructure problems.</p>
+            </div>
+
+            <div class="footer-actions">
+              <a class="nb-btn nb-ink-btn" href="./resumes/Anish_Thota_Resume.pdf" target="_blank" rel="noopener">
+                <span>Download Resume ↗</span>
+              </a>
+              <button class="nb-btn nb-surface copy-btn" id="copy-email-footer" type="button" aria-label="Copy email address anishthota96@gmail.com">
+                <svg class="icon-copy" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <svg class="icon-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="copy-label">anishthota96@gmail.com</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="footer-bottom">
+            <span>Anish Thota · Hyderabad, India</span>
+            <div class="footer-links">
+              <a href="https://github.com/Anish6964" target="_blank" rel="noopener">GitHub ↗</a>
+              <a href="https://www.linkedin.com/in/anishthota" target="_blank" rel="noopener">LinkedIn ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+  <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="./script.js" defer></script>
+</body>
+</html>
